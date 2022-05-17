@@ -261,21 +261,14 @@ class RSNN_Model(nn.Module):
         
         torch.save(state, './checkpoint/' + modelname,  _use_new_zipfile_serialization=False)
  
-    def save_to_numpy(self, directory = 'default'):
-        layers_location = 'checkpoint/'+ directory
+    def save_to_numpy(self, directory = None):
+        layers_location = './../spinnaker/models/' + directory
 
         if not os.path.isdir(layers_location):
             os.mkdir(layers_location)
 
-        weights_biases = []
         snn_state_dict = self.state_dict()
-        
-        with open(layers_location+'/model_info', 'a') as logs:
-            spk = self.test_spk_count[-1][1].detach().cpu().numpy()
-            logs.write("avg spk neuron/sample {}".format(spk)) 
-            logs.write("\navg spk neuron/timestep {}".format(spk*(self.num_hidden/self.win)))  
         
         for k in snn_state_dict:
             np.savez(layers_location+'/'+k,snn_state_dict[k].data.cpu().numpy())
-            weights_biases.append(snn_state_dict[k].data.cpu().numpy())     
                 
