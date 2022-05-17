@@ -1,0 +1,4 @@
+
+Finished training 10 epochs for nmnist_rnn_lsm_2048, batch_size 200, time_per_epoch 12.61764645576477 s
+Finished training 10 epochs for nmnist_rnn_lsm_512, batch_size 200, time_per_epoch 9.362841606140137 s
+Finished training 10 epochs for nmnist_rnn_lsm_512, batch_size 200, time_per_epoch 9.341256618499756 s
