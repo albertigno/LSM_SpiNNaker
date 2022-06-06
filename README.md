@@ -9,7 +9,7 @@
 - SpiNNaker inference: spinnaker/spinnaker_inference.ipynb
 
 #### Prerequisites: 
-- NMNIST Dataset. Here we use the 50 frames, downloadable [here](https://drive.google.com/drive/folders/1XkqIHMioy4fmbTgJ__x4bjN_YWs9XU4a?usp=sharing).
+- NMNIST Dataset. Downloadable [here](https://drive.google.com/drive/folders/1XkqIHMioy4fmbTgJ__x4bjN_YWs9XU4a?usp=sharing).
 - pytorch
 - matplotlib
 - h5py
