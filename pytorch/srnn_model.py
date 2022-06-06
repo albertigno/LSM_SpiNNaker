@@ -48,6 +48,7 @@ class RSNN_Model(nn.Module):
         self.fc_ih = nn.Linear(self.num_input, self.num_hidden, bias= False)
         self.fc_hh = nn.Linear(num_hidden, self.num_hidden, bias= False)
         self.fc_ho = nn.Linear(num_hidden, self.num_output, bias= False)
+        self.num_samples = 60000
         
         self.epoch = 0
         self.acc = list()
@@ -92,6 +93,9 @@ class RSNN_Model(nn.Module):
         return mem, o_spike
     
     def freeze_parameters(self):
+        '''
+        make input-to-hidden and hidden-to-hidden connections untrainable
+        '''
         for i, parameter in enumerate(self.parameters()):
             print(parameter.shape)
             if i<2:
@@ -110,13 +114,13 @@ class RSNN_Model(nn.Module):
             self.fc_ih.weight.data = torch.nn.Parameter(reduce_precision(self.fc_ih.weight.data, bits-1))
             #self.fc_ho.weight.data = torch.nn.Parameter(reduce_precision(self.fc_ho.weight.data, 1))                  
                 
-    def train_step(self, train_loader=None, optimizer=None, criterion=None, num_samples=0):
+    def train_step(self, train_loader=None, optimizer=None, criterion=None):
         
         total_loss_train = 0
         running_loss = 0
         total = 0
         
-        num_iter = num_samples // self.batch_size 
+        num_iter = self.num_samples // self.batch_size 
         
         for i, (images, labels) in enumerate(train_loader):
             self.zero_grad()
@@ -133,7 +137,7 @@ class RSNN_Model(nn.Module):
 
             if (i + 1) % int(num_iter/3.0) == 0:
                 print('Step [%d/%d], Loss: %.5f'
-                      % (i + 1, num_samples // self.batch_size, running_loss))
+                      % (i + 1, self.num_samples // self.batch_size, running_loss))
                 running_loss = 0
                 
         self.epoch = self.epoch + 1
@@ -183,6 +187,9 @@ class RSNN_Model(nn.Module):
         print('Test Accuracy of the model on the test samples: %.3f' % (acc))    
 
     def plot_weights(self, w, mode='histogram', crop_size = None ):
+        '''
+        plots weights as mode=histogram or as mode=matrix
+        '''
         
         name='weight distribution'
         
@@ -236,18 +243,11 @@ class RSNN_Model(nn.Module):
         plt.legend()
         
         return fig   
-
-    def load_model(self, modelname=None, location = '', batch_size=256, device='cpu'):
-        params = torch.load('./checkpoint'+location+'/'+modelname, map_location=torch.device('cpu'))
-        
-        self.__init__(params['num_hidden'], params['win'], batch_size, device)
-        self.load_state_dict(params['net'])
-        self.acc = params['acc_record'] 
-        self.train_loss = params['train_loss']
-        self.test_loss = params['test_loss']     
             
     def save_model(self, modelname = 'rsnn'):
-
+        '''
+        save model in the pytorch format to /checkpoint
+        '''
         state = {
             'net': self.state_dict(),
             'epoch': self.epoch,
@@ -260,8 +260,20 @@ class RSNN_Model(nn.Module):
         }         
         
         torch.save(state, './checkpoint/' + modelname,  _use_new_zipfile_serialization=False)
- 
+
+    def load_model(self, modelname=None, location = '', batch_size=256, device='cpu'):
+        params = torch.load('./checkpoint'+location+'/'+modelname, map_location=torch.device('cpu'))
+        
+        self.__init__(params['num_hidden'], params['win'], batch_size, device)
+        self.load_state_dict(params['net'])
+        self.acc = params['acc_record'] 
+        self.train_loss = params['train_loss']
+        self.test_loss = params['test_loss']           
+        
     def save_to_numpy(self, directory = None):
+        '''
+        saves weights to numpy files that will be later loaded by PyNN / SpyNNaker
+        '''
         layers_location = './../spinnaker/models/' + directory
 
         if not os.path.isdir(layers_location):

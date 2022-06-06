@@ -43,8 +43,7 @@ class RSNN_SPyNN():
         off = 0.3
         tau_m = 9.49122
         cm = e_rev/108.8 # (spinnaker, nmnist)
-        #h_weight = 0.5
-        h_weight = 1.0
+        h_weight = 0.5
 
         self.inicio = 0    
         
