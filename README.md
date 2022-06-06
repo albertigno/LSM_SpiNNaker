@@ -1,4 +1,4 @@
-# LSM_SpiNNaker
+# Liquid State Machine on SpiNNaker for Spatio-Temporal Classification Tasks
  LSM trained in PyTorch and implemented on SpiNNaker for the N-MNIST Dataset
  ![g](lsm.png)
  
