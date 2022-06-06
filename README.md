@@ -16,4 +16,4 @@
 - spynnaker. Tested on SpiNN-3, SpiNN-5 and HBP Server
 
 #### Citation
-- Patiño-Saucedo, Alberto, et al. "Liquid State Machine on SpiNNaker for Spatio-Temporal Classification Tasks." Frontiers in Neuroscience 16 (2022).
+- Patiño-Saucedo, A., Rostro-González, H., Serrano-Gotarredona, T., & Linares-Barranco, B. (2022). Liquid State Machine on SpiNNaker for Spatio-Temporal Classification Tasks. Frontiers in Neuroscience, 16. [Full text](https://www.frontiersin.org/articles/10.3389/fnins.2022.819063/full)
